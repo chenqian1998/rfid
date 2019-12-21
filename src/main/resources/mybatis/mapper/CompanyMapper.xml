@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nju.se.rfid.mapper.CompanyMapper">
+    <select id="getCompanyById" resultType="nju.se.rfid.bean.Company">
+        SELECT * FROM company where company_id=#{id}
+    </select>
+
+    <select id="getCompanyByName" resultType="nju.se.rfid.bean.Company">
+        SELECT * FROM company where company_name=#{companyName}
+    </select>
+
+    <select id="getAllCompanies" resultType="nju.se.rfid.bean.Company">
+        SELECT * FROM company
+    </select>
+
+</mapper>

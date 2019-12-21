@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nju.se.rfid.mapper.OrdersMapper">
+    <select id="getOrdersByProductId" resultType="nju.se.rfid.bean.Orders">
+        SELECT * FROM orders where product_id=#{id}
+    </select>
+    
+    <insert id="insertOrders">
+        INSERT INTO orders(product_id,weight,create_date,status,create_company,send_company,receive_company,destory_company)
+         VALUE (#{productId},#{weight},#{createDate},#{status},#{createCompany},#{sendCompany},#{receiveCompany},#{destoryCompany})
+    </insert>
+
+</mapper>
