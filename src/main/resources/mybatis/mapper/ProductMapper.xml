@@ -5,6 +5,10 @@
         SELECT * FROM product WHERE id = #{id}
     </select>
 
+    <select id="getProductByCasId" resultType="nju.se.rfid.bean.Product">
+        SELECT * FROM product WHERE cas_id = #{casId}
+    </select>
+
     <insert id="insertProduct">
         INSERT INTO product(cas_id,batch_id,product_name,create_date,company_id)
             VALUE (#{casId},#{batchId},#{productName},#{createDate},#{companyId})

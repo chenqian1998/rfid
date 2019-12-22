@@ -1,10 +1,13 @@
 package nju.se.rfid.controller;
 
 import nju.se.rfid.bean.Company;
+import nju.se.rfid.bean.Orders;
 import nju.se.rfid.bean.Product;
 import nju.se.rfid.mapper.CompanyMapper;
+import nju.se.rfid.mapper.OrdersMapper;
 import nju.se.rfid.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +29,10 @@ public class ProductController {
     @Autowired
     CompanyMapper companyMapper;
 
+    @Resource
+    @Autowired
+    OrdersMapper ordersMapper;
+
     public List<Company> getAllCompanies(){
         List<Company> companies = companyMapper.getAllCompanies();
         return companies;
@@ -41,13 +48,34 @@ public class ProductController {
 
     //添加商品页面
     @PostMapping("/product")
-    public String addProduct(Product product){
+    public String addProduct(Product product,double weight){
         System.out.println("=================");
         System.out.println("输出添加的药物信息："+product);
         System.out.println("=================");
+        System.out.println(product.getCasId()+"   "+weight);
         productMapper.insertProduct(product);
+
+        //通过cas_id查询该商品的product_id
+        String cas_id = product.getCasId();
+        Product p = productMapper.getProductByCasId(cas_id);
+
+        Orders orderAdd = new Orders();
+        orderAdd.setProductId(p.getProductId());
+        orderAdd.setWeight(weight);
+        orderAdd.setCreateDate(p.getCreateDate());
+        orderAdd.setStatus(0);
+        orderAdd.setCreateCompany(p.getCompanyId());
+
+        ordersMapper.insertOrders(orderAdd);
         return "main.html";
     }
 
-
+    @GetMapping("/test")
+    public String test(){
+        // 通过cas_id查询该商品的product_id
+        String cas_id = "2222-22-2";
+        Product p = productMapper.getProductByCasId(cas_id);
+        System.out.println(p);
+        return "test";
+    }
 }

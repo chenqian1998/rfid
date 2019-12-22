@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Update;
 public interface ProductMapper {
     public Product getProductById(Integer id);
 
+    public Product getProductByCasId(String casId);
+
     public void insertProduct(Product product);
 
 }

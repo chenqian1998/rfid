@@ -9,5 +9,9 @@ import java.util.List;
 public interface OrdersMapper {
     public List<Orders> getOrdersByProductId(Integer id);
 
+    public List<Orders> getOrdersByCompanyId(Integer companyId);
+
     public void insertOrders(Orders orders);
+
+
 }

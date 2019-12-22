@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -31,6 +32,11 @@ public class OrdersController {
         List<Company> companies = companyMapper.getAllCompanies();
         return companies;
     }
+
+    public List<Orders> getOrdersByCompanyId(Integer id){
+        return ordersMapper.getOrdersByCompanyId(id);
+    }
+
 
     public void printAllOrders(){
         List<Orders> ordersList = ordersMapper.getOrdersByProductId(1);
@@ -50,12 +56,16 @@ public class OrdersController {
 
     //提交这个接收信息
     @PostMapping("/orders")
-    public String addOrders(Orders orders){
+    public String addOrders(Orders orders, Model model, HttpSession session){
         System.out.println("=================");
         System.out.println("输出添加的药物信息："+orders);
         System.out.println("=================");
         ordersMapper.insertOrders(orders);
         System.out.println("插入："+orders);
+
+        Integer companyId = (Integer) session.getAttribute("companyId");
+        List<Orders> ordersList = getOrdersByCompanyId(companyId);
+        model.addAttribute("ordersList",ordersList);
         return "/main.html";
     }
 
@@ -72,7 +82,11 @@ public class OrdersController {
     }
 
     @PostMapping("/send")
-    public String sendOrders(Orders orders){
+    public String sendOrders(Orders orders,Model model, HttpSession session){
+        Integer companyId = (Integer) session.getAttribute("companyId");
+        List<Orders> ordersList = getOrdersByCompanyId(companyId);
+        model.addAttribute("ordersList",ordersList);
+
         ordersMapper.insertOrders(orders);
         return "/main.html";
     }

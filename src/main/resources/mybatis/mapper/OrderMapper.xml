@@ -4,6 +4,10 @@
     <select id="getOrdersByProductId" resultType="nju.se.rfid.bean.Orders">
         SELECT * FROM orders where product_id=#{id}
     </select>
+
+    <select id="getOrdersByCompanyId" resultType="nju.se.rfid.bean.Orders">
+        SELECT * FROM orders where create_company = #{companyId} or receive_company = #{companyId} or send_company=#{companyId}
+    </select>
     
     <insert id="insertOrders">
         INSERT INTO orders(product_id,weight,create_date,status,create_company,send_company,receive_company,destory_company)

@@ -17,11 +17,6 @@ public class CompanyController {
     @Autowired
     CompanyMapper companyMapper;
 
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
-
     public List<Company> getAllCompanies(){
         List<Company> companies = companyMapper.getAllCompanies();
         for(Company c:companies){
