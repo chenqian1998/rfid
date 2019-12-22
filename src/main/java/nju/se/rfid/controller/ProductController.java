@@ -3,11 +3,14 @@ package nju.se.rfid.controller;
 import nju.se.rfid.bean.Company;
 import nju.se.rfid.bean.Orders;
 import nju.se.rfid.bean.Product;
+import nju.se.rfid.bean.rfidInfo;
 import nju.se.rfid.mapper.CompanyMapper;
 import nju.se.rfid.mapper.OrdersMapper;
 import nju.se.rfid.mapper.ProductMapper;
+import nju.se.rfid.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,6 +36,9 @@ public class ProductController {
     @Resource
     @Autowired
     OrdersMapper ordersMapper;
+
+    @Autowired
+    ProductService productService;
 
     public List<Company> getAllCompanies(){
         List<Company> companies = companyMapper.getAllCompanies();
@@ -67,6 +74,16 @@ public class ProductController {
         orderAdd.setCreateCompany(p.getCompanyId());
 
         ordersMapper.insertOrders(orderAdd);
+
+        // rfid设备写入数据
+        rfidInfo rfidInfo = new rfidInfo();
+        rfidInfo.setBatch_id(p.getBatchId());
+        rfidInfo.setCas_id(p.getCasId());
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(p.getCompanyId());
+        list.add(orderAdd.getWeight().intValue());
+        rfidInfo.setOperateInfo(list);
+        productService.addProduct(rfidInfo);
         return "main.html";
     }
 

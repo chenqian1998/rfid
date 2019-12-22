@@ -1,6 +1,5 @@
 package nju.se.rfid.controller;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
 import nju.se.rfid.bean.Company;
 import nju.se.rfid.bean.Orders;
 import nju.se.rfid.mapper.CompanyMapper;
