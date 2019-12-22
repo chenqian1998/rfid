@@ -16,4 +16,9 @@ class RfidApplicationTests {
         System.out.println("获取数据库连接为："+dataSource.getConnection());
     }
 
+    @Test
+    void test() throws Exception{
+        System.out.println("获取数据库连接为："+dataSource.getConnection());
+    }
+
 }
