@@ -50,7 +50,7 @@
 <div class="container-fluid">
     <div class="row">
         <!--引入侧边栏-->
-        <div th:replace="commons/bar::#sidebar(activeUri='products')"></div>
+        <div th:replace="commons/bar::#sidebar(activeUri='/product')"></div>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <h2><a class="btn btn-sm btn-success" href="product" th:href="@{/product}">药品添加</a></h2>
