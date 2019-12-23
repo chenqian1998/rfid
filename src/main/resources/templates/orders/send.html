@@ -66,19 +66,19 @@
                 -->
                 <div class="form-group">
                     <label>casId</label>
-                    <input name="productId" type="text" class="form-control"
+                    <input id="casId" name="productId" type="text" class="form-control"
                            placeholder="1">
                 </div>
 
                 <div class="form-group">
-                    <label>接收日期</label>
+                    <label>发送日期</label>
                     <input name="createDate" type="text" class="form-control"
                            placeholder="2019-1-1">
                 </div>
 
                 <div class="form-group">
                     <label>剩余容量</label>
-                    <input name="productId" type="text" class="form-control"
+                    <input id="weight" name="productId" type="text" class="form-control"
                            placeholder="1">
                 </div>
 
@@ -108,7 +108,8 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">添加</button>
+                <button type="submit" class="btn btn-primary">发送</button>
+                <button type="button" class="btn btn-danger" onclick="getRfidData()">同步设备</button>
             </form>
         </main>
     </div>
@@ -125,6 +126,23 @@
 <script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
 <script>
     feather.replace()
+
+    $.function(){
+
+    }
+
+    function getRfidData() {
+        $.ajax({
+            url : "/orders/getRfidInfo",
+            type : 'GET',
+            success : function(data) {
+                $("#casId").val(data.casId)
+                $("#weight").val(data.weight)
+            }
+        });
+    }
+
+
 </script>
 
 </body>

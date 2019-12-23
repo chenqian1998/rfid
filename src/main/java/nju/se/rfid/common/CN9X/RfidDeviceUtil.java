@@ -15,7 +15,7 @@ import java.util.Observer;
 public class RfidDeviceUtil {
     private static ReaderConnector mConnector;
     private static ReaderHelper mReaderHelper;
-    private static byte insertLocation = 0x02;
+    private static byte insertLocation = (byte)0x02;
 
     static Observer mObserver = new RXObserver() {
         @Override
@@ -83,10 +83,10 @@ public class RfidDeviceUtil {
         }
     }
 
-    public static String read(String port, int buad){
-        if (mReaderHelper == null){
-            setConnector(port, buad);
-        }
+    public static String read(){
+//        if (mReaderHelper == null){
+//            setConnector(port, buad);
+//        }
         String data = "";
         if(mReaderHelper != null) {
             System.out.println("Connect success!");
@@ -98,7 +98,10 @@ public class RfidDeviceUtil {
                 System.out.println("isReadSuccess:"+((RFIDReaderHelper) mReaderHelper).readTag((byte)0xff,(byte)0x01,(byte)0x00,(byte)0x02,null));
                 Thread.currentThread().sleep(2000);
                 data = RXTXListenerImpl.str;
-
+                while (data.length() <50 ){
+                    Thread.currentThread().sleep(2000);
+                    data = RXTXListenerImpl.str;
+                }
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -107,7 +110,10 @@ public class RfidDeviceUtil {
             System.out.println("Connect faild!");
             mConnector.disConnect();
         }
-        return data;
+
+//        int lastIndex = (((int)insertLocation) - 2) * 2 * 2 + (((int)insertLocation) - 2) * 2 - 1;
+        System.out.println(data);
+        return data.substring(24,59);
     }
 
     public static void write(Map<String,String> map, String type, int size){
@@ -142,10 +148,15 @@ public class RfidDeviceUtil {
                     String weight = map.get("weight");
                     data[4] = int2ByteArray(Integer.parseInt(companyId));
                     data[5] = int2ByteArray(Integer.parseInt(weight));
+                    insertLocation = 0x05;
+                }
+
+                if (type.equals("02")) {
+
                 }
 
 //				byte[] data = {(byte)0x0C,(byte)0x0B,(byte)0x0A,(byte)0x09,(byte)0x08,(byte)0x07,(byte)0x06,(byte)0x05,(byte)0x04,(byte)0x03,(byte)0x02,(byte)0x01};
-				System.out.println("isWriteSuccess:"+((RFIDReaderHelper) mReaderHelper).writeTag((byte)0xff,psw,(byte)0x01,insertLocation,int2ByteArray(size/2),data));
+				System.out.println("isWriteSuccess:"+((RFIDReaderHelper) mReaderHelper).writeTag((byte)0xff,psw,(byte)0x01,(byte)0x02,int2ByteArray(size/2),data));
 
             } catch (Exception e) {
                 // TODO Auto-generated catch block

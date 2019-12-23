@@ -6,16 +6,15 @@ import nju.se.rfid.bean.Product;
 import nju.se.rfid.bean.rfidInfo;
 import nju.se.rfid.mapper.CompanyMapper;
 import nju.se.rfid.mapper.OrdersMapper;
+import nju.se.rfid.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -27,6 +26,9 @@ public class OrdersController {
     @Resource
     @Autowired
     CompanyMapper companyMapper;
+
+    @Autowired
+    OrderService orderService;
 
     public List<Company> getAllCompanies(){
         List<Company> companies = companyMapper.getAllCompanies();
@@ -74,9 +76,10 @@ public class OrdersController {
         List<Company> companies = getAllCompanies();
 
         //读取到RFID里面的信息
-        rfidInfo rfidInfo = getProductInfo();
+//        rfidInfo rfidInfo = getProductInfo();
+        //rfidInfo rfidInfo = orderService.getProductInfo();
 
-        model.addAttribute("rfidInfo",rfidInfo);
+        //model.addAttribute("rfidInfo",rfidInfo);
         model.addAttribute("companies",companies);
         return "orders/send";
     }
@@ -98,6 +101,16 @@ public class OrdersController {
         // rfidInfo
         return new rfidInfo();
 
+    }
+
+    @RequestMapping(value = "/orders/getRfidInfo")
+    @ResponseBody
+    public Object getRfidInfo(){
+        HashMap<Object,Object> map = new HashMap<>(1);
+        rfidInfo rfidInfo = orderService.getProductInfo();
+        map.put("casId",rfidInfo.getCas_id());
+        map.put("weight",rfidInfo.getOperateInfo().get(1));
+        return map;
     }
 
 
